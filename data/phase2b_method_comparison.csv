@@ -1,0 +1,7 @@
+method,nmi,ari,purity,seconds
+tfidf+svd [full],1.0,1.0,1.0,0.7
+minilm embeddings [full],0.998,0.991,0.992,4.4
+tfidf+svd [terse (first 8 words)],1.0,1.0,1.0,1.0
+minilm embeddings [terse (first 8 words)],0.994,0.976,0.982,3.2
+tfidf+svd [lexical variation (50% drop + shuffle)],0.867,0.703,0.825,1.5
+minilm embeddings [lexical variation (50% drop + shuffle)],0.723,0.391,0.578,5.7

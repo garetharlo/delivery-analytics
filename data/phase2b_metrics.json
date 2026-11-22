@@ -1,0 +1,50 @@
+{
+  "sample": 20000,
+  "issue_types": 100,
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "results": [
+    {
+      "method": "tfidf+svd [full]",
+      "nmi": 1.0,
+      "ari": 1.0,
+      "purity": 1.0,
+      "seconds": 0.7
+    },
+    {
+      "method": "minilm embeddings [full]",
+      "nmi": 0.998,
+      "ari": 0.991,
+      "purity": 0.992,
+      "seconds": 4.4
+    },
+    {
+      "method": "tfidf+svd [terse (first 8 words)]",
+      "nmi": 1.0,
+      "ari": 1.0,
+      "purity": 1.0,
+      "seconds": 1.0
+    },
+    {
+      "method": "minilm embeddings [terse (first 8 words)]",
+      "nmi": 0.994,
+      "ari": 0.976,
+      "purity": 0.982,
+      "seconds": 3.2
+    },
+    {
+      "method": "tfidf+svd [lexical variation (50% drop + shuffle)]",
+      "nmi": 0.867,
+      "ari": 0.703,
+      "purity": 0.825,
+      "seconds": 1.5
+    },
+    {
+      "method": "minilm embeddings [lexical variation (50% drop + shuffle)]",
+      "nmi": 0.723,
+      "ari": 0.391,
+      "purity": 0.578,
+      "seconds": 5.7
+    }
+  ],
+  "note": "synthetic corpus has one canonical sentence per issue type, so both methods are near-ceiling on full text; the terse condition is the informative one"
+}
