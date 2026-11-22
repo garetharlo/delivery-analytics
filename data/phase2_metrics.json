@@ -1,0 +1,22 @@
+{
+  "validation": {
+    "nmi": 1.0,
+    "ari": 1.0,
+    "cluster_purity": 1.0,
+    "issue_type_concentration": 1.0,
+    "n_issue_types": 100,
+    "sample": 40000,
+    "caveat": "one canonical sentence per issue type in this synthetic generator, so recovery is near-deterministic and says nothing about messy real text"
+  },
+  "effort_split": {
+    "automatable_pct": 27.6,
+    "assisted_pct": 47.5,
+    "human_only_pct": 24.9,
+    "total_elapsed_hours": 2832814.0
+  },
+  "savings_pct_of_total_effort": {
+    "40pct_automation": 11.0,
+    "60pct_automation": 16.6,
+    "80pct_automation": 22.1
+  }
+}

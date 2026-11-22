@@ -1,0 +1,101 @@
+family,intent,tickets,median_res_h,mean_res_h,total_h,sla_breach,escalated,feasibility,share_of_volume,share_of_effort,effort_cum
+data,data data corruption,3635,32.82,49.93,163721.31,0.568,0.812,human-only,0.015,0.058,0.058
+security,security delete my data,2326,70.69,69.56,145863.88,0.512,0.796,assisted,0.009,0.051,0.109
+security,security gdpr data request,2136,71.03,73.54,141936.7,0.518,0.802,assisted,0.009,0.05,0.159
+onboarding,onboarding training request,3281,26.12,39.34,116719.59,0.075,0.785,automatable,0.013,0.041,0.201
+refunds,refunds refund denied appeal,2583,32.82,48.03,111185.85,0.571,0.797,assisted,0.01,0.039,0.24
+account,account region change,1958,49.08,61.74,108099.13,0.388,0.793,assisted,0.008,0.038,0.278
+account,account merge accounts,2436,34.81,48.98,106529.14,0.287,0.792,assisted,0.01,0.038,0.316
+security,security data breach concern,2585,32.92,45.96,106391.08,0.571,0.803,assisted,0.01,0.038,0.353
+bugs,bugs intermittent error,2430,38.62,48.76,105703.49,0.312,0.804,human-only,0.01,0.037,0.39
+subscription,subscription unexpected renewal,3896,15.68,28.99,101390.34,0.332,0.801,automatable,0.016,0.036,0.426
+refunds,refunds chargeback question,2045,34.4,50.99,93915.52,0.569,0.808,assisted,0.008,0.033,0.459
+billing,billing billing dispute,2209,31.22,45.68,90078.13,0.543,0.785,automatable,0.009,0.032,0.491
+bugs,bugs calc wrong,3179,16.64,29.17,83057.77,0.355,0.807,human-only,0.013,0.029,0.521
+authentication,authentication recover deleted account,2120,24.08,42.36,80525.55,0.443,0.796,automatable,0.008,0.028,0.549
+refunds,refunds duplicate refund,2689,21.54,32.33,78199.21,0.185,0.801,assisted,0.011,0.028,0.577
+refunds,refunds partial refund,2199,21.76,33.36,65317.14,0.186,0.787,assisted,0.009,0.023,0.6
+refunds,refunds wrong refund amount,2476,16.05,27.73,61957.41,0.321,0.798,assisted,0.01,0.022,0.621
+subscription,subscription cancel without request,2522,15.56,26.99,61547.24,0.331,0.807,automatable,0.01,0.022,0.643
+billing,billing payment deducted failed,2426,16.11,28.18,61087.26,0.332,0.8,automatable,0.01,0.022,0.665
+performance,performance perf after update,2431,15.31,25.79,56035.29,0.322,0.789,human-only,0.01,0.02,0.685
+authentication,authentication sso config,2744,6.32,13.34,33023.38,0.047,0.21,automatable,0.011,0.012,0.696
+security,security phishing report,2151,7.08,15.72,30062.23,0.12,0.785,assisted,0.009,0.011,0.707
+integrations,integrations integration broken,3131,4.18,9.57,26773.82,0.098,0.205,assisted,0.012,0.009,0.716
+security,security compromised account,2614,5.31,10.75,25408.7,0.089,0.817,assisted,0.01,0.009,0.725
+data,data partial sync,3773,3.08,6.94,23565.76,0.059,0.194,human-only,0.015,0.008,0.734
+authentication,authentication suspicious login,2864,4.86,8.91,23134.17,0.074,0.806,automatable,0.011,0.008,0.742
+subscription,subscription auto renew off,4106,0.72,5.64,20792.6,0.039,0.116,automatable,0.016,0.007,0.749
+refunds,refunds refund request,2967,3.08,7.33,19582.69,0.017,0.193,assisted,0.012,0.007,0.756
+performance,performance page load slow,2894,3.08,7.19,18570.88,0.011,0.192,human-only,0.012,0.007,0.763
+bugs,bugs feature not working,3506,2.67,5.8,18227.66,0.043,0.203,human-only,0.014,0.006,0.769
+integrations,integrations data export api,3295,2.74,6.1,18011.49,0.007,0.182,assisted,0.013,0.006,0.775
+data,data sync across devices,2399,3.6,8.17,17664.26,0.023,0.195,human-only,0.01,0.006,0.782
+data,data sync conflict,2050,3.6,9.48,17606.58,0.023,0.185,human-only,0.008,0.006,0.788
+bugs,bugs report generation bug,2045,4.13,9.38,17341.87,0.096,0.208,human-only,0.008,0.006,0.794
+performance,performance memory usage high,2381,3.6,8.01,17221.09,0.019,0.194,human-only,0.01,0.006,0.8
+integrations,integrations webhook setup,2272,3.6,8.19,16889.94,0.019,0.189,assisted,0.009,0.006,0.806
+bugs,bugs crash on upload,2317,3.22,8.18,16870.66,0.057,0.2,human-only,0.009,0.006,0.812
+security,security ip allowlist,2967,3.08,6.04,16119.69,0.009,0.185,assisted,0.012,0.006,0.818
+billing,billing invoice wrong amount,2827,2.55,6.17,15683.1,0.006,0.185,automatable,0.011,0.006,0.823
+bugs,bugs ui glitch,2409,3.08,7.01,15288.58,0.003,0.189,human-only,0.01,0.005,0.829
+integrations,integrations api deprecation,2203,3.44,7.56,14978.48,0.023,0.187,assisted,0.009,0.005,0.834
+security,security audit log request,2769,2.66,6.0,14822.44,0.008,0.19,assisted,0.011,0.005,0.839
+integrations,integrations oauth flow error,2053,3.6,7.94,14592.64,0.076,0.204,assisted,0.008,0.005,0.844
+billing,billing double charge,2885,2.65,5.35,13932.34,0.043,0.185,automatable,0.012,0.005,0.849
+performance,performance report timeout,2153,3.38,7.15,13897.92,0.062,0.209,human-only,0.009,0.005,0.854
+integrations,integrations rate limit,2050,3.03,7.29,13458.26,0.012,0.186,assisted,0.008,0.005,0.859
+account,account close account,2069,3.08,7.16,13436.81,0.014,0.184,assisted,0.008,0.005,0.864
+security,security permissions too broad,2328,2.94,6.38,13344.85,0.043,0.198,assisted,0.009,0.005,0.868
+data,data stale data,2427,2.55,5.57,12139.08,0.008,0.179,human-only,0.01,0.004,0.873
+performance,performance search slow,2883,2.35,4.62,11954.49,0.005,0.185,human-only,0.012,0.004,0.877
+bugs,bugs data not saving,1928,3.08,6.7,11738.02,0.054,0.196,human-only,0.008,0.004,0.881
+account,account reactivate account,2218,2.37,5.7,11427.06,0.029,0.208,assisted,0.009,0.004,0.885
+authentication,authentication cannot login correct creds,2786,2.06,4.42,11156.28,0.02,0.191,automatable,0.011,0.004,0.889
+performance,performance slow dashboard,1908,2.55,6.43,11151.4,0.007,0.177,human-only,0.008,0.004,0.893
+billing,billing currency change,2772,2.1,4.46,10898.49,0.004,0.18,automatable,0.011,0.004,0.897
+performance,performance export slow,1863,2.78,6.05,10253.23,0.008,0.189,human-only,0.007,0.004,0.9
+bugs,bugs error 500,1910,2.85,5.91,10250.42,0.039,0.197,human-only,0.008,0.004,0.904
+data,data offline changes lost,1976,2.55,5.78,9976.2,0.029,0.196,human-only,0.008,0.004,0.907
+performance,performance high latency api,1700,3.08,6.22,9441.08,0.047,0.222,human-only,0.007,0.003,0.911
+onboarding,onboarding custom fields,2965,1.5,3.38,9117.18,0.004,0.166,automatable,0.012,0.003,0.914
+subscription,subscription downgrade plan,2521,1.55,4.02,9057.12,0.002,0.187,automatable,0.01,0.003,0.917
+account,account change owner,1520,2.68,6.57,8879.69,0.008,0.185,assisted,0.006,0.003,0.92
+onboarding,onboarding how to import,1852,2.52,4.76,7928.75,0.002,0.16,automatable,0.007,0.003,0.923
+billing,billing proration question,2136,1.8,4.03,7719.46,0.004,0.178,automatable,0.009,0.003,0.926
+authentication,authentication session timeout,1652,2.41,5.05,7539.25,0.004,0.189,automatable,0.007,0.003,0.928
+account,account data residency,3301,0.67,2.45,7228.89,0.004,0.009,assisted,0.013,0.003,0.931
+data,data sync status check,4225,0.42,1.87,7091.18,0.002,0.005,human-only,0.017,0.003,0.934
+performance,performance perf baseline question,3352,0.65,2.32,6938.41,0.003,0.006,human-only,0.013,0.002,0.936
+data,data timezone mismatch,1549,1.78,4.78,6690.31,0.004,0.184,human-only,0.006,0.002,0.938
+integrations,integrations third party connector,1995,0.68,3.67,6558.32,0.006,0.012,assisted,0.008,0.002,0.941
+billing,billing tax id update,2395,0.51,3.03,6476.38,0.003,0.008,automatable,0.01,0.002,0.943
+subscription,subscription seat count change,2059,1.81,3.53,6473.79,0.001,0.185,automatable,0.008,0.002,0.945
+security,security security cert request,2382,0.88,2.97,6410.75,0.005,0.008,assisted,0.01,0.002,0.947
+subscription,subscription trial extension,2220,1.5,3.18,6331.1,0.001,0.179,automatable,0.009,0.002,0.95
+onboarding,onboarding setup notifications,3482,0.42,2.01,6312.4,0.004,0.005,automatable,0.014,0.002,0.952
+subscription,subscription plan comparison,2894,0.67,2.41,6303.65,0.003,0.007,automatable,0.012,0.002,0.954
+integrations,integrations api key generate,2423,0.53,2.88,6282.89,0.008,0.011,assisted,0.01,0.002,0.956
+account,account company name change,2884,0.52,2.33,6119.53,0.006,0.006,assisted,0.012,0.002,0.959
+bugs,bugs broken link,1691,0.89,4.01,6076.92,0.002,0.011,human-only,0.007,0.002,0.961
+onboarding,onboarding getting started,2406,0.4,2.79,6021.7,0.003,0.009,automatable,0.01,0.002,0.963
+integrations,integrations api docs request,2832,0.3,2.32,5936.05,0.003,0.006,assisted,0.011,0.002,0.965
+data,data manual resync,2040,0.52,3.23,5880.64,0.003,0.008,human-only,0.008,0.002,0.967
+account,account add admin,2576,0.42,2.53,5825.99,0.003,0.007,assisted,0.01,0.002,0.969
+refunds,refunds refund status,1686,0.52,3.81,5821.13,0.002,0.004,assisted,0.007,0.002,0.971
+onboarding,onboarding mobile app setup,2287,0.42,2.74,5667.32,0.005,0.007,automatable,0.009,0.002,0.973
+authentication,authentication twofa not delivered,2269,0.49,2.76,5644.66,0.005,0.007,automatable,0.009,0.002,0.975
+billing,billing update billing email,3088,0.3,2.03,5616.14,0.002,0.006,automatable,0.012,0.002,0.977
+subscription,subscription upgrade plan,2008,0.41,3.03,5512.55,0.006,0.007,automatable,0.008,0.002,0.979
+subscription,subscription renewal question,1769,0.3,3.42,5423.11,0.006,0.009,automatable,0.007,0.002,0.981
+onboarding,onboarding how to invite,3070,0.3,1.94,5368.52,0.002,0.006,automatable,0.012,0.002,0.983
+authentication,authentication password reset,2347,0.43,2.53,5333.76,0.003,0.008,automatable,0.009,0.002,0.985
+authentication,authentication account locked,3744,0.39,1.55,5235.0,0.001,0.006,automatable,0.015,0.002,0.987
+refunds,refunds refund method,1538,1.81,3.69,5068.53,0.003,0.173,assisted,0.006,0.002,0.988
+authentication,authentication email verification,2249,0.41,2.46,4981.31,0.005,0.007,automatable,0.009,0.002,0.99
+onboarding,onboarding feature discovery,1908,0.52,2.82,4884.69,0.005,0.006,automatable,0.008,0.002,0.992
+billing,billing invoice copy,3030,0.31,1.8,4862.82,0.005,0.006,automatable,0.012,0.002,0.994
+onboarding,onboarding how to export,2770,0.3,1.83,4604.01,0.002,0.004,automatable,0.011,0.002,0.995
+refunds,refunds refund policy,2147,0.3,2.37,4602.92,0.004,0.006,assisted,0.009,0.002,0.997
+account,account update profile,2511,0.3,2.0,4548.76,0.004,0.005,assisted,0.01,0.002,0.998
+account,account contact update,2671,0.29,1.89,4488.52,0.003,0.005,assisted,0.011,0.002,1.0
