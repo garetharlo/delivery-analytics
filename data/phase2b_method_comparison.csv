@@ -1,7 +1,7 @@
-method,nmi,ari,purity,seconds
-tfidf+svd [full],1.0,1.0,1.0,0.7
-minilm embeddings [full],0.998,0.991,0.992,4.4
-tfidf+svd [terse (first 8 words)],1.0,1.0,1.0,1.0
-minilm embeddings [terse (first 8 words)],0.994,0.976,0.982,3.2
-tfidf+svd [lexical variation (50% drop + shuffle)],0.867,0.703,0.825,1.5
-minilm embeddings [lexical variation (50% drop + shuffle)],0.723,0.391,0.578,5.7
+method,nmi,ari,purity,seconds,condition,representation,represent_seconds
+tfidf+svd [full],1.0,1.0,1.0,2.7,full,tfidf+svd,1.6
+minilm embeddings [full],0.998,0.991,0.992,18.3,full,minilm,148.3
+tfidf+svd [terse (first 8 words)],1.0,1.0,1.0,2.1,terse (first 8 words),tfidf+svd,1.0
+minilm embeddings [terse (first 8 words)],0.994,0.976,0.982,20.3,terse (first 8 words),minilm,125.0
+tfidf+svd [lexical variation (50% drop + shuffle)],0.867,0.703,0.825,3.4,lexical variation (50% drop + shuffle),tfidf+svd,1.4
+minilm embeddings [lexical variation (50% drop + shuffle)],0.723,0.391,0.578,19.5,lexical variation (50% drop + shuffle),minilm,108.5

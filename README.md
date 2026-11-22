@@ -6,6 +6,7 @@ Two datasets, one question, answered in numbers: effort per contact driver, the 
 
 - **[`FINDINGS.md`](FINDINGS.md)** — phase 1: effort economics on a real ITSM event log
 - **[`FINDINGS-PHASE2.md`](FINDINGS-PHASE2.md)** — phase 2: named intents, automation feasibility, savings range
+- **[`FINDINGS-PHASE2B.md`](FINDINGS-PHASE2B.md)** — phase 2b: does the clustering method survive messier text?
 
 ## Headline results
 
@@ -23,6 +24,12 @@ Two datasets, one question, answered in numbers: effort per contact driver, the 
 - Two families — **security (17.7%)** and **refunds (15.7%)** — are **33% of effort from 17% of volume**, and are policy work, not technical
 - Effort split: **automatable 9.6%** (from 31% of tickets), **assisted 65.6%**, **human-only 24.9%**
 - Automating 40 / 60 / 80% of the automatable share removes **4% / 6% / 8%** of total elapsed effort — the automatable intents are the *fast* ones, so the real win there is contact volume, not hours
+
+**Phase 2b — method check** (20,000 of the same tickets)
+
+- TF-IDF and sentence embeddings both recover the 100 issue types almost perfectly on full and terse text (NMI ≥ 0.99), so this corpus cannot rank them
+- With half the words dropped and the rest shuffled, TF-IDF holds up better (NMI 0.87 vs 0.72) — but that test is biased against the embedding model, so it does not show TF-IDF is better on real tickets
+- Clustering is not a GPU job: the whole comparison runs on a laptop CPU in a few minutes
 
 ## Data
 
@@ -47,6 +54,10 @@ python scripts/02_economics.py
 # phase 2
 curl -L -o tickets.parquet "https://huggingface.co/datasets/s2pidape/support-ticket-dataset/resolve/refs%2Fconvert%2Fparquet/humans_only/train/0000.parquet"
 python scripts/03_intents.py
+
+# phase 2b (uses tickets.parquet from phase 2; downloads the MiniLM model on first run)
+pip install sentence-transformers
+python scripts/03b_embeddings.py
 ```
 
 ## Outputs
@@ -59,11 +70,14 @@ data/effort_by_group.csv
 data/intents_economics.csv         # phase 2: per-intent volume, effort, SLA, feasibility
 data/effort_by_intent_family.csv
 data/phase2_metrics.json           # validation + savings scenarios, machine-readable
+data/phase2b_method_comparison.csv # phase 2b: NMI / ARI / purity and timings per method and condition
+data/phase2b_metrics.json
 charts/pareto_effort_by_category.png
 charts/pareto_curve.png
 charts/sla_by_category.png
 charts/intents_pareto.png          # top intents coloured by feasibility
 charts/feasibility_split.png
+charts/phase2b_methods.png         # TF-IDF vs embeddings under degraded text
 ```
 
 ## Method notes

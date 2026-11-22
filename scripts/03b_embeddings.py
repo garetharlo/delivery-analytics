@@ -30,9 +30,14 @@ from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
 torch.set_num_threads(max(1, torch.get_num_threads()))
-SCRATCH = Path("/workspace/hermes/cache/scratch/delivery-analytics")
-OUT = Path("/opt/data/delivery-analytics")
+ROOT = Path(__file__).resolve().parents[1]   # repo root; tickets.parquet lives here (see README)
+SCRATCH = ROOT
+OUT = ROOT
 SEED, N = 42, 20_000
 
 BOILER = [r"hi team", r"hi there", r"hello,?", r"hey,?", r"good morning,?", r"dear (support|team)",
@@ -100,26 +105,57 @@ for cond, col in (("full", "clean"),
                   ("terse (first 8 words)", "terse"),
                   ("lexical variation (50% drop + shuffle)", "vary")):
     print(f"\n== {cond} text ==")
+    t0 = time.time()
     vec = TfidfVectorizer(max_features=30_000, ngram_range=(1, 2), min_df=2, sublinear_tf=True)
     X = vec.fit_transform(s[col])
     Z_tfidf = normalize(TruncatedSVD(n_components=150, random_state=SEED).fit_transform(X))
-    results.append(evaluate(Z_tfidf, f"tfidf+svd [{cond}]"))
+    rep_s = round(time.time() - t0, 1)
+    results.append({**evaluate(Z_tfidf, f"tfidf+svd [{cond}]"),
+                    "condition": cond, "representation": "tfidf+svd", "represent_seconds": rep_s})
 
     t0 = time.time()
     emb = model.encode(s[col].tolist(), batch_size=128, show_progress_bar=False,
                        convert_to_numpy=True, normalize_embeddings=True)
-    print(f"  embeddings computed in {time.time()-t0:.0f}s (dim {emb.shape[1]})")
-    results.append(evaluate(emb, f"minilm embeddings [{cond}]"))
+    rep_s = round(time.time() - t0, 1)
+    print(f"  embeddings computed in {rep_s:.0f}s (dim {emb.shape[1]})")
+    results.append({**evaluate(emb, f"minilm embeddings [{cond}]"),
+                    "condition": cond, "representation": "minilm", "represent_seconds": rep_s})
 
+# "seconds" = k-means time; "represent_seconds" = time to build the text representation.
+# Timings depend on the machine; the scores do not.
 res = pd.DataFrame(results)
 res.to_csv(OUT / "data/phase2b_method_comparison.csv", index=False)
 json.dump({"sample": int(len(s)), "issue_types": int(k),
            "model": "sentence-transformers/all-MiniLM-L6-v2",
            "results": results,
-           "note": "synthetic corpus has one canonical sentence per issue type, so both methods are near-ceiling on full text; the terse condition is the informative one"},
+           "note": "synthetic corpus has one canonical sentence per issue type, so both methods are "
+                   "near-ceiling on full and terse text; only the lexical-variation condition separates them, "
+                   "and that condition is biased against the embedding model (word order destroyed)"},
           open(OUT / "data/phase2b_metrics.json", "w"), indent=2)
 
-piv = res.pivot(index="method", columns="method", values="nmi") if False else None
 print("\n=== summary ===")
 print(res.pivot_table(index=["method"], values=["nmi", "ari", "purity"]).round(3).to_string())
-print("\nwrote data/phase2b_method_comparison.csv + data/phase2b_metrics.json")
+
+# ---------- chart ----------
+conds = ["full", "terse (first 8 words)", "lexical variation (50% drop + shuffle)"]
+labels = ["full text", "terse (8 words)", "lexical\nvariation"]
+nmi = res.pivot(index="condition", columns="representation", values="nmi").loc[conds]
+x = np.arange(len(conds))
+w = 0.36
+fig, ax = plt.subplots(figsize=(9, 5))
+for off, rep, name, colour in ((-w / 2, "tfidf+svd", "TF-IDF + SVD", "#2c3e50"),
+                               (w / 2, "minilm", "MiniLM embeddings", "#16a085")):
+    ax.bar(x + off, nmi[rep], w, label=name, color=colour)
+    for xi, v in zip(x + off, nmi[rep]):
+        ax.text(xi, v + 0.01, f"{v:.2f}", ha="center", fontsize=8)
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.set_ylim(0, 1.05)
+ax.set_ylabel("NMI vs the 100 known issue types")
+ax.set_title(f"Intent recovery under degraded text ({len(s) // 1000}k tickets, synthetic corpus)")
+ax.legend(loc="lower left")
+plt.tight_layout()
+plt.savefig(OUT / "charts/phase2b_methods.png", dpi=140)
+plt.close()
+
+print("\nwrote data/phase2b_method_comparison.csv, data/phase2b_metrics.json, charts/phase2b_methods.png")

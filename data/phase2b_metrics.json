@@ -8,43 +8,61 @@
       "nmi": 1.0,
       "ari": 1.0,
       "purity": 1.0,
-      "seconds": 0.7
+      "seconds": 2.7,
+      "condition": "full",
+      "representation": "tfidf+svd",
+      "represent_seconds": 1.6
     },
     {
       "method": "minilm embeddings [full]",
       "nmi": 0.998,
       "ari": 0.991,
       "purity": 0.992,
-      "seconds": 4.4
+      "seconds": 18.3,
+      "condition": "full",
+      "representation": "minilm",
+      "represent_seconds": 148.3
     },
     {
       "method": "tfidf+svd [terse (first 8 words)]",
       "nmi": 1.0,
       "ari": 1.0,
       "purity": 1.0,
-      "seconds": 1.0
+      "seconds": 2.1,
+      "condition": "terse (first 8 words)",
+      "representation": "tfidf+svd",
+      "represent_seconds": 1.0
     },
     {
       "method": "minilm embeddings [terse (first 8 words)]",
       "nmi": 0.994,
       "ari": 0.976,
       "purity": 0.982,
-      "seconds": 3.2
+      "seconds": 20.3,
+      "condition": "terse (first 8 words)",
+      "representation": "minilm",
+      "represent_seconds": 125.0
     },
     {
       "method": "tfidf+svd [lexical variation (50% drop + shuffle)]",
       "nmi": 0.867,
       "ari": 0.703,
       "purity": 0.825,
-      "seconds": 1.5
+      "seconds": 3.4,
+      "condition": "lexical variation (50% drop + shuffle)",
+      "representation": "tfidf+svd",
+      "represent_seconds": 1.4
     },
     {
       "method": "minilm embeddings [lexical variation (50% drop + shuffle)]",
       "nmi": 0.723,
       "ari": 0.391,
       "purity": 0.578,
-      "seconds": 5.7
+      "seconds": 19.5,
+      "condition": "lexical variation (50% drop + shuffle)",
+      "representation": "minilm",
+      "represent_seconds": 108.5
     }
   ],
-  "note": "synthetic corpus has one canonical sentence per issue type, so both methods are near-ceiling on full text; the terse condition is the informative one"
+  "note": "synthetic corpus has one canonical sentence per issue type, so both methods are near-ceiling on full and terse text; only the lexical-variation condition separates them, and that condition is biased against the embedding model (word order destroyed)"
 }
