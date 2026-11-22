@@ -9,14 +9,24 @@
     "caveat": "one canonical sentence per issue type in this synthetic generator, so recovery is near-deterministic and says nothing about messy real text"
   },
   "effort_split": {
-    "automatable_pct": 27.6,
-    "assisted_pct": 47.5,
+    "automatable_pct": 9.6,
+    "assisted_pct": 65.6,
     "human_only_pct": 24.9,
-    "total_elapsed_hours": 2832814.0
+    "total_elapsed_hours": 2832814.0,
+    "automatable_volume_pct": 31.2,
+    "rule": "family default, but an automatable-family intent with median >= 15 h or SLA breach >= 30% is assisted",
+    "moved_to_assisted": [
+      "authentication recover deleted account",
+      "billing billing dispute",
+      "billing payment deducted failed",
+      "onboarding training request",
+      "subscription cancel without request",
+      "subscription unexpected renewal"
+    ]
   },
   "savings_pct_of_total_effort": {
-    "40pct_automation": 11.0,
-    "60pct_automation": 16.6,
-    "80pct_automation": 22.1
+    "40pct_automation": 3.8,
+    "60pct_automation": 5.7,
+    "80pct_automation": 7.7
   }
 }

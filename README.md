@@ -14,14 +14,15 @@ Two datasets, one question, answered in numbers: effort per contact driver, the 
 - Top 10 categories = **69% of volume but 79% of elapsed effort**
 - **32% of tickets** close in under an hour but hold **~0% of the hours**; **35%** run ≥72 h and hold **96%**
 - **49% of incidents** are reassigned; they contain **73% of all elapsed hours** (median 79.9 h vs 0.7 h)
+- **99% of contacts are phone**, 0.7% self-service
 - **62% of resolved incidents met SLA** — but only **9% of Critical** and **1% of High**; 46% when reassigned vs 77% when not
 
 **Phase 2 — named intents** (250,599 English tickets, 100 issue types)
 
 - Top 10 intents = **11% of volume but 42.6% of effort**
 - Two families — **security (17.7%)** and **refunds (15.7%)** — are **33% of effort from 17% of volume**, and are policy work, not technical
-- Effort split: **automatable 27.6%**, **assisted 47.5%**, **human-only 24.9%**
-- Automating 40 / 60 / 80% of the automatable share removes **11% / 17% / 22%** of total elapsed effort — and the automatable intents are the *fast* ones, so the real win there is contact volume, not hours
+- Effort split: **automatable 9.6%** (from 31% of tickets), **assisted 65.6%**, **human-only 24.9%**
+- Automating 40 / 60 / 80% of the automatable share removes **4% / 6% / 8%** of total elapsed effort — the automatable intents are the *fast* ones, so the real win there is contact volume, not hours
 
 ## Data
 
@@ -69,7 +70,7 @@ charts/feasibility_split.png
 
 - **Cycle time, not handle time.** Elapsed = opened → resolved, which includes queue and waiting. It is the right measure for service cost, the wrong one for headcount; reassignment count is used as a second, touch-based proxy.
 - **SLA = final state.** `made_sla` is read from each incident's last event, because the flag flips to False once the SLA is breached. (An earlier version took `max()` over events and reported 100% attainment — an aggregation bug.)
-- **Feasibility is a documented judgement**, not model output: one explicit dict in `scripts/03_intents.py` maps each family to automatable / assisted / human-only.
+- **Feasibility is a documented judgement**, not model output: one explicit dict in `scripts/03_intents.py` gives each family a default, and any automatable-family intent with a median of 15 h or more or an SLA breach of 30% or more is moved to *assisted*. (An earlier version labelled whole families and reported 11–22% savings; 65% of those "automatable" hours were six slow, ~80%-escalated intents.)
 - **Boilerplate stripping matters.** The synthetic corpus repeats stock phrases; without removing them, clusters form around "Hi team" rather than around the problem being reported.
 - **Validation is flattering and flagged as such.** Text recovers the 100 issue types at NMI 1.0 *because* the generator writes one canonical sentence per type — evidence the pipeline works, not evidence about messy real text.
 

@@ -105,7 +105,20 @@ tab = df.groupby(["family", "intent"]).agg(
     sla_breach=("sla_breached", "mean"),
     escalated=("escalated", "mean"),
 ).reset_index()
-tab["feasibility"] = tab["family"].map(FEASIBILITY)
+tab["family_default"] = tab["family"].map(FEASIBILITY)
+# The family label is only a starting point. An intent in an "automatable" family
+# that is slow or often misses its SLA is evidence that a person handles it
+# (billing disputes, recovering deleted accounts, unexpected renewals), so it is
+# moved to "assisted". Without this step 65% of the "automatable" hours came from
+# six slow, ~80%-escalated intents and the savings range was overstated ~3x.
+SLOW_H = 15      # median resolution hours
+BREACH = 0.30    # SLA breach rate
+needs_person = (tab["median_res_h"] >= SLOW_H) | (tab["sla_breach"] >= BREACH)
+tab["feasibility"] = tab["family_default"].where(
+    ~((tab["family_default"] == "automatable") & needs_person), "assisted")
+moved = tab[tab["feasibility"] != tab["family_default"]]
+print(f"\nmoved from automatable to assisted (median >= {SLOW_H} h or SLA breach >= {BREACH:.0%}):")
+print(moved[["intent", "median_res_h", "sla_breach", "escalated"]].to_string(index=False))
 tab["share_of_volume"] = tab["tickets"] / tab["tickets"].sum()
 tab["share_of_effort"] = tab["total_h"] / tab["total_h"].sum()
 tab = tab.sort_values("total_h", ascending=False).reset_index(drop=True)
@@ -120,14 +133,14 @@ tab.to_csv(OUT / "data/intents_economics.csv", index=False)
 fam = tab.groupby("family").agg(
     tickets=("tickets", "sum"), total_h=("total_h", "sum"),
     median_res_h=("median_res_h", "median"), sla_breach=("sla_breach", "mean"),
-    escalated=("escalated", "mean"), feasibility=("feasibility", "first"),
+    escalated=("escalated", "mean"), family_default=("family_default", "first"),
 ).sort_values("total_h", ascending=False)
 fam["share_of_volume"] = (fam["tickets"] / fam["tickets"].sum()).round(3)
 fam["share_of_effort"] = (fam["total_h"] / fam["total_h"].sum()).round(3)
 fam.to_csv(OUT / "data/effort_by_intent_family.csv")
 
 print("\n=== effort by intent family ===")
-print((fam[["tickets", "share_of_volume", "median_res_h", "share_of_effort", "sla_breach", "escalated", "feasibility"]])
+print((fam[["tickets", "share_of_volume", "median_res_h", "share_of_effort", "sla_breach", "escalated", "family_default"]])
       .assign(sla_breach=lambda d: (d.sla_breach * 100).round(1), escalated=lambda d: (d.escalated * 100).round(1),
               share_of_volume=lambda d: (d.share_of_volume * 100).round(1), share_of_effort=lambda d: (d.share_of_effort * 100).round(1))
       .to_string())
@@ -140,10 +153,14 @@ print(tab.head(12)[["intent", "tickets", "share_of_volume", "median_res_h", "sha
               sla_breach=lambda d: (d.sla_breach * 100).round(1),
               escalated=lambda d: (d.escalated * 100).round(1)).to_string(index=False))
 
-auto_h = fam.loc[fam["feasibility"] == "automatable", "total_h"].sum()
-assist_h = fam.loc[fam["feasibility"] == "assisted", "total_h"].sum()
-human_h = fam.loc[fam["feasibility"] == "human-only", "total_h"].sum()
-tot_h = fam["total_h"].sum()
+# split and savings use the per-intent label, not the family default
+auto_h = tab.loc[tab["feasibility"] == "automatable", "total_h"].sum()
+assist_h = tab.loc[tab["feasibility"] == "assisted", "total_h"].sum()
+human_h = tab.loc[tab["feasibility"] == "human-only", "total_h"].sum()
+tot_h = tab["total_h"].sum()
+auto_vol = tab.loc[tab["feasibility"] == "automatable", "tickets"].sum() / tab["tickets"].sum()
+print(f"automatable intents: {(tab['feasibility'] == 'automatable').sum()} of {len(tab)}, "
+      f"{auto_vol:.1%} of tickets")
 print(f"\neffort split: automatable {auto_h/tot_h:.1%} | assisted {assist_h/tot_h:.1%} | human-only {human_h/tot_h:.1%}")
 for pct in (0.4, 0.6, 0.8):
     saved = auto_h * pct
@@ -190,7 +207,11 @@ json.dump({
     "effort_split": {"automatable_pct": round(auto_h/tot_h*100, 1),
                      "assisted_pct": round(assist_h/tot_h*100, 1),
                      "human_only_pct": round(human_h/tot_h*100, 1),
-                     "total_elapsed_hours": round(float(tot_h), 0)},
+                     "total_elapsed_hours": round(float(tot_h), 0),
+                     "automatable_volume_pct": round(float(auto_vol) * 100, 1),
+                     "rule": f"family default, but an automatable-family intent with median >= {SLOW_H} h "
+                             f"or SLA breach >= {BREACH:.0%} is assisted",
+                     "moved_to_assisted": moved["intent"].tolist()},
     "savings_pct_of_total_effort": {f"{int(p*100)}pct_automation": round(float(auto_h*p/tot_h*100), 1)
                                     for p in (0.4, 0.6, 0.8)},
 }, open(OUT / "data/phase2_metrics.json", "w"), indent=2)
