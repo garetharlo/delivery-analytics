@@ -12,6 +12,7 @@ This repo takes a real ITSM incident event log and answers that with numbers: ef
 - **32% of tickets** close in under an hour but hold **~0% of the hours**; **35%** run ≥72 h and hold **96%**
 - **49% of incidents** are reassigned; they contain **73% of all elapsed hours** (median 79.9 h vs 0.7 h)
 - **99% of contacts are phone**, 0.7% self-service
+- **62% of resolved incidents met SLA** — but only **9% of Critical** and **1% of High**; 46% when reassigned vs 77% when not
 
 ## Data
 
@@ -22,6 +23,7 @@ No employer or client data is used, at any point, in any form.
 ## How to reproduce
 
 ```bash
+# run from the repo root
 pip install pandas matplotlib
 curl -L -o uci498.zip "https://archive.ics.uci.edu/static/public/498/incident+management+process+enriched+event+log.zip"
 python scripts/01_build_incidents.py   # event log -> incident-level table
@@ -43,7 +45,7 @@ charts/sla_by_category.png
 ## Method notes
 
 - **Cycle time, not handle time.** Elapsed = opened → resolved, which includes queue and waiting. It is the right measure for service cost, the wrong one for headcount; reassignment count is used as a second, touch-based proxy.
-- **`made_sla` is 100% True** in this extract, so no SLA claim is made from it.
+- **SLA = final state.** `made_sla` is read from each incident's last event, because the flag flips to False once the SLA is breached.
 - **Labels are anonymised** (`Category 46`), so this phase reports structure only.
 
 ## Phase 2 (planned)

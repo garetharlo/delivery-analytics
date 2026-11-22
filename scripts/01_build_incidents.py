@@ -8,10 +8,13 @@ effort-relevant attributes.
 """
 import os
 import zipfile
+from pathlib import Path
 import pandas as pd
 
-RAW = "/workspace/hermes/cache/scratch/uci498.zip"
-OUT = "/opt/data/delivery-analytics/data"
+# paths are relative to the repo root, so the README steps work on any machine
+ROOT = Path(__file__).resolve().parents[1]
+RAW = ROOT / "uci498.zip"
+OUT = ROOT / "data"
 os.makedirs(OUT, exist_ok=True)
 
 z = zipfile.ZipFile(RAW)
@@ -28,6 +31,12 @@ def mode_or_na(s):
     s = s[s.astype(str).str.strip() != "?"]
     return s.mode().iloc[0] if len(s.mode()) else ""
 
+# made_sla flips from True to False once the SLA is breached, so the incident's
+# final state is the value on its last event (taking the max over events would
+# count every ticket that was ever inside its SLA as having made it)
+last = (df.sort_values(["number", "sys_updated_at", "sys_mod_count"])
+          .groupby("number").tail(1).set_index("number"))
+
 g = df.groupby("number")
 inc = pd.DataFrame({
     "opened_at": g["opened_at"].min(),
@@ -43,7 +52,7 @@ inc = pd.DataFrame({
     "contact_type": g["contact_type"].apply(mode_or_na),
     "reopen_count": g["reopen_count"].max(),
     "reassignment_count": g["reassignment_count"].max(),
-    "made_sla": g["made_sla"].max(),
+    "made_sla": last["made_sla"],
     "resolved_by": g["resolved_by"].apply(mode_or_na),
     "cmdb_ci": g["cmdb_ci"].apply(mode_or_na),
 })
@@ -58,6 +67,7 @@ print(inc.head(3).to_string()[:600])
 print("\nshape:", inc.shape)
 print("with resolution time:", inc["resolution_h"].notna().sum(),
       f"({inc['resolution_h'].notna().mean():.1%})")
+print("made_sla (final state):", inc["made_sla"].mean().round(4))
 print("reopen>0:", (inc["reopen_count"].fillna(0) > 0).mean().round(4),
       "| reassigned>0:", (inc["reassignment_count"].fillna(0) > 0).mean().round(4))
 print("categories:", inc["category"].replace("", pd.NA).dropna().nunique(),

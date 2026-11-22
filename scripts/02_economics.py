@@ -5,12 +5,13 @@ reassignment count as a proxy for touch-work, because the public event log has
 no explicit handle-time field. Both limitations are reported in FINDINGS.md.
 """
 import os
+from pathlib import Path
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-BASE = "/opt/data/delivery-analytics"
+BASE = Path(__file__).resolve().parents[1]  # repo root
 inc = pd.read_csv(f"{BASE}/data/incidents.csv", parse_dates=["opened_at", "resolved_at", "closed_at"])
 os.makedirs(f"{BASE}/data", exist_ok=True)
 os.makedirs(f"{BASE}/charts", exist_ok=True)
@@ -80,11 +81,33 @@ no_h = eff.loc[~eff["reassigned"], "resolution_h"]
 extra = re_h.median() - no_h.median()
 print(f"\nreassignment: {eff['reassigned'].mean():.1%} of incidents, "
       f"median {re_h.median():.1f} h vs {no_h.median():.1f} h unreassigned "
-      f"(+{extra:.1f} h, {extra*re_h.median()**0 and 0 or 0:.0f})")
+      f"(+{extra:.1f} h)")
+print(f"reassigned twice or more: {(eff['reassignment_count'].fillna(0) >= 2).mean():.1%}")
 print(f"elapsed hours sitting in reassigned incidents: {re_h.sum():,.0f} h "
       f"({re_h.sum()/eff['resolution_h'].sum():.1%} of all elapsed)")
 
-# SLA
+# fast lane vs slow tail
+total_h = eff["resolution_h"].sum()
+fast = eff["resolution_h"] < 1
+tail = eff["resolution_h"] >= 72
+print(f"\nfast lane (<1 h): {fast.mean():.1%} of incidents, "
+      f"{eff.loc[fast, 'resolution_h'].sum() / total_h:.2%} of elapsed hours")
+print(f"slow tail (>=72 h): {tail.mean():.1%} of incidents, "
+      f"{eff.loc[tail, 'resolution_h'].sum() / total_h:.1%} of elapsed hours")
+
+# channel mix
+print("\ncontact type (% of resolved incidents):")
+print((eff["contact_type"].value_counts(normalize=True) * 100).round(2).to_string())
+
+# SLA (final state of each incident; see 01_build_incidents.py)
+print(f"\nSLA met overall: {eff['made_sla'].mean():.1%}")
+print("SLA met by priority:")
+print((eff.groupby("priority")["made_sla"].agg(["mean", "count"])
+       .assign(mean=lambda d: (d["mean"] * 100).round(1))).to_string())
+print(f"SLA met, reassigned: {eff.loc[eff['reassigned'], 'made_sla'].mean():.1%} "
+      f"vs never reassigned: {eff.loc[~eff['reassigned'], 'made_sla'].mean():.1%}")
+print(f"SLA met, <1 h: {eff.loc[fast, 'made_sla'].mean():.1%} "
+      f"vs >=72 h: {eff.loc[tail, 'made_sla'].mean():.1%}")
 sla_by_cat = (eff.groupby("category")["made_sla"].agg(["mean", "count"])
               .query("count >= 100").sort_values("mean"))
 print("\nworst SLA categories (>=100 tickets):")

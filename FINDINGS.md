@@ -36,12 +36,24 @@ Contact type across resolved incidents: **Phone 99.1%**, Self-service 0.7%, Emai
 
 Self-service is effectively unused, so deflection here is a channel-design problem rather than an optimisation of an existing digital channel. The sub-1-hour categories are the natural first candidates — they are cheap to deflect and expensive to keep on the phone.
 
+## 5. SLA: the most urgent tickets almost never make it
+
+`made_sla` is taken from each incident's **final** event (the flag flips to False once the SLA is breached).
+
+- **62% of resolved incidents** met their SLA overall
+- By priority: **Critical 8.7%** (287 tickets), **High 1.2%** (407), Moderate 63.0%, Low 82.4%
+- Reassigned incidents met SLA **45.6%** of the time vs **77.1%** for never-reassigned
+- Sub-1-hour incidents met SLA **94.5%**; incidents open 72 h or more only **12.8%**
+- Worst categories (≥100 tickets): Category 55 at 20%, Category 45 at 25%, Category 34 at 33% — Category 34 is also the 2.1%-of-volume / 16%-of-effort outlier from section 1
+
+The SLA picture lines up with the effort picture: the reassigned, long-running tail is where the time goes *and* where the SLA is lost. The Critical/High numbers are low enough that the SLA targets for those priorities should be checked before quoting them (they may be set unrealistically tight in this extract).
+
 ---
 
 ## Limitations (read before quoting these numbers)
 
 1. **Elapsed time ≠ agent effort.** Cycle time includes queue and waiting for the caller. It is the right measure for *service* cost and the wrong one for *headcount* cost; pairing it with reassignment counts and ticket volume gives a better effort proxy than either alone.
-2. **`made_sla` is True for 100% of records** in this extract — the SLA field is unusable, so no SLA-attainment claim can be made from this data.
+2. **SLA is a yes/no flag, not a time.** The extract records whether the SLA was met, not the target itself, so the size of a miss is unknown. (An earlier version of this page said the field was 100% True; that was an aggregation bug — taking the max over events — now fixed.)
 3. **Anonymised labels.** `Category 46` cannot be explained to a business audience. Phase 2 (text clustering on a text-rich dataset) exists to attach meaning to structure like this.
 4. **One company, three months, sealed 2016.** Treat as a method demonstration, not a market benchmark.
 5. Derived from public data only. No employer or client data was used.
